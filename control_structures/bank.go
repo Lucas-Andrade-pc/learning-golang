@@ -1,50 +1,21 @@
 package main
 
 import (
-	"errors"
+	"bank/fileops"
 	"fmt"
 	"os"
-	"strconv"
 )
 
 const accountFile = "balance.txt"
 
-func readyBalanceFile() (float64, error) {
-	data, err := os.ReadFile(accountFile)
-	if err != nil {
-		fmt.Println(err)
-		return 1000, errors.New("failed open file")
-	}
-	balanceText := string(data)
-	balance, err := strconv.ParseFloat(balanceText, 64)
-	if err != nil {
-		return 1000, errors.New("failed convert string -> float64")
-	}
-	return balance, nil
-
-}
-
-func writeBalanceToFile(balance float64) {
-	balanceText := fmt.Sprint(balance)
-	os.WriteFile(accountFile, []byte(balanceText), 0644)
-}
-
 func main() {
 
-	accountBalance, err := readyBalanceFile()
+	accountBalance, err := fileops.ReadyBalanceFile(accountFile)
 	if err != nil {
-		fmt.Println(err)
-		//os.Exit(1)
-		panic("Can't continue sorry!")
+		fmt.Println("No money account!")
 	}
 	for {
-		fmt.Println("Welcome to go Bank!")
-		fmt.Println("What do you want to do?")
-		fmt.Println("1. Check balance")
-		fmt.Println("2. Deposit money")
-		fmt.Println("3. Withdraw money")
-		fmt.Println("4. Exit")
-
+		presentOptions()
 		var choice int
 		fmt.Print("\nYour choice: ")
 		fmt.Scan(&choice)
@@ -59,11 +30,12 @@ func main() {
 
 			if newDeposit <= 0 {
 				fmt.Println("Invalid amount!")
-				return
+				continue
+				// return - tambem funciona para sair do loop
 			} else {
 				accountBalance := accountBalance + newDeposit
 				fmt.Printf("Accoumt Balance update! %v\n", accountBalance)
-				writeBalanceToFile(accountBalance)
+				fileops.WriteBalanceToFile(accountFile, accountBalance)
 			}
 		case 3:
 			var withDraw float64
