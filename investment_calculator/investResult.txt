@@ -1,2 +1,2 @@
-investment result = 110.46
-investment result with inflation = 86.29
+investment result = 269.57
+investment result with inflation = 128.52

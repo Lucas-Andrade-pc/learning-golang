@@ -4,34 +4,31 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"os"
 )
-
-func salveResultFile(investResult, investResultWithInflation string) {
-	data := fmt.Sprint(investResult, investResultWithInflation)
-	err := os.WriteFile("investResult.txt", []byte(data), 0644)
-	if err != nil {
-		fmt.Printf("Erro in write file")
-		os.Exit(1)
-	}
-}
 
 func main() {
 	const inflationRate float64 = 2.5
+	const fileResult = "investResult.txt"
+	for {
+		resultFile, _ := getFile(fileResult)
+		fmt.Print("Salve in file! \n")
+		fmt.Print(resultFile)
+		fmt.Println("------------------------------------------")
+		TL := getInputUserTL("Total investment = ")
+		ERR, err := getInputUserERR("Expected Result Rate = ")
+		if err != nil {
+			panic(err)
+		}
+		YEARS := getInputUserYears("Years = ")
 
-	TL := getInputUserTL("Total investment = ")
-	ERR, err := getInputUserERR("Expected Result Rate = ")
-	if err != nil {
-		panic(err)
+		futureResultInvestment, futureValueWithInflation := calculateFutureValueInvestments(TL, ERR, YEARS, inflationRate)
+
+		formatterFutureResultInvestment := fmt.Sprintf("investment result = %.2f\n", futureResultInvestment)
+		formatterFutureResultInflation := fmt.Sprintf("investment result with inflation = %.2f\n", futureValueWithInflation)
+
+		// fmt.Print(formatterFutureResultInvestment, formatterFutureResultInflation)
+		salveResultFile(formatterFutureResultInvestment, formatterFutureResultInflation)
 	}
-	YEARS := getInputUserYears("Years = ")
-
-	futureResultInvestment, futureValueWithInflation := calculateFutureValueInvestments(TL, ERR, YEARS, inflationRate)
-
-	formatterFutureResultInvestment := fmt.Sprintf("investment result = %.2f\n", futureResultInvestment)
-	formatterFutureResultInflation := fmt.Sprintf("investment result with inflation = %.2f\n", futureValueWithInflation)
-
-	salveResultFile(formatterFutureResultInvestment, formatterFutureResultInflation)
 
 }
 
