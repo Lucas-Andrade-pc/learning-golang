@@ -1,6 +1,8 @@
 package main
 
 import (
+	"avanced_function/recursion"
+	"avanced_function/slice_function"
 	"fmt"
 )
 
@@ -60,6 +62,13 @@ func main() {
 
 	fat := factorial(5)
 	fmt.Println(fat)
+
+	fatrecursion := recursion.FactorialRecursion(5)
+	fmt.Println("recursion", fatrecursion)
+
+	slice := []int{1, 3, 4, 5, 6, 6}
+	result := slice_function.SumSlice(slice)
+	fmt.Println("sum slice - ", result)
 
 }
 

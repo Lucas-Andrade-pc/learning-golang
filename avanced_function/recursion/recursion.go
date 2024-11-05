@@ -1,10 +1,9 @@
 package recursion
 
-func factorial(number int) int {
-	result := 1
-	for i := 1; i <= number; i++ {
-		result = result * i
+func FactorialRecursion(number int) int {
+	if number == 0 {
+		return 1
 	}
-	return result
+	return number * FactorialRecursion(number-1)
 
 }
