@@ -2,36 +2,39 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var DB *sql.DB
+//var DB *sql.DB
 
 func InitDb() {
-	connect, err := sql.Open("sqlite3", "api.db")
+	DB, err := sql.Open("sqlite3", "api.db")
 	if err != nil {
+		fmt.Println("Error Connect to database")
 		panic("Cloud not connect to database")
 	}
 
-	connect.SetMaxOpenConns(10)
-	connect.SetMaxIdleConns(5)
-	createTables()
+	DB.SetMaxOpenConns(10)
+	DB.SetMaxIdleConns(5)
+	createTables(DB)
 }
 
-func createTables() {
+// Function init tables databases
+func createTables(db *sql.DB) {
 	createEventTables := `
 	CREATE TABLE IF NOT EXISTS events (
-	  id INTERGER PRIMARY KEY AUTOINCREMENT,
+	  id INTEGER PRIMARY KEY AUTOINCREMENT,
 	  name TEXT NOT NULL,
 	  description TEXT NOT NULL,
 	  location TEXT NOT NULL,
-	  dateTime DATETIME NOT NULL
+	  dateTime DATETIME NOT NULL,
 	  user_id INTERGER
 	)
 	`
-	_, err := DB.Exec(createEventTables)
+	_, err := db.Exec(createEventTables)
 	if err != nil {
-		panic("cloud not create table ")
+		panic(fmt.Sprintf("Erro create event tables - %v", err))
 	}
 }
