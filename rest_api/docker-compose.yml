@@ -1,0 +1,25 @@
+services:
+  api01:
+    image: api_go:test
+    networks:
+      - nginx
+  api02:
+    image: api_go:test
+    networks:
+      - nginx
+  api03:
+    image: api_go:test
+    networks:
+      - nginx
+  lb:
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - nginx
+
+networks:
+    nginx:
+    

@@ -7,9 +7,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-//var DB *sql.DB
+var PointerSqlBd *sql.DB
 
 func InitDb() {
+
 	DB, err := sql.Open("sqlite3", "api.db")
 	if err != nil {
 		fmt.Println("Error Connect to database")
@@ -19,6 +20,9 @@ func InitDb() {
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(5)
 	createTables(DB)
+
+	PointerSqlBd = DB
+
 }
 
 // Function init tables databases
@@ -37,4 +41,5 @@ func createTables(db *sql.DB) {
 	if err != nil {
 		panic(fmt.Sprintf("Erro create event tables - %v", err))
 	}
+	fmt.Println("Create tables sucesso!")
 }
