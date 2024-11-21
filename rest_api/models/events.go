@@ -1,4 +1,4 @@
-package events
+package models
 
 import (
 	"fmt"
@@ -70,7 +70,34 @@ func GetAllEvent() ([]Event, error) {
 	return events, nil
 }
 
-func Nginx() []net.Addr {
+func (event Event) Update() (Event, error) {
+	query := `
+	UPDATE events
+	SET name = ?, description = ?, location = ?, dateTime = ?
+	WHERE id = ?
+	`
+
+	stmt, err := db.PointerSqlBd.Prepare(query)
+	if err != nil {
+		return Event{}, err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(event.Name, event.Description, event.Location, event.DataTime, event.Id)
+	fmt.Println(event.Name, event.Description, event.Location, event.DataTime, event.UserID)
+	return event, err
+}
+func (event Event) Delete() (Event, error) {
+	query := `DELETE FROM events WHERE id = ?`
+	stmt, err := db.PointerSqlBd.Prepare(query)
+	if err != nil {
+		return Event{}, err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(event.Id)
+	return event, err
+}
+
+func Container() []net.Addr {
 	ifaces, _ := net.Interfaces()
 
 	var address []net.Addr
